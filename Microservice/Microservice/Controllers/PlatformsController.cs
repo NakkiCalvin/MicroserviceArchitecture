@@ -2,6 +2,7 @@
 using Microservice.Data;
 using Microservice.Dtos;
 using Microservice.Models;
+using Microservice.SyncDataServices.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Microservice.Controllers
@@ -10,11 +11,15 @@ namespace Microservice.Controllers
     [ApiController]
     public class PlatformsController : ControllerBase
     {
+        private readonly ICommandDataClient _commandDataClient;
         private readonly IPlatformRepo _repository;
         private readonly IMapper _mapper;
 
-        public PlatformsController(IPlatformRepo repository, IMapper mapper)
+        public PlatformsController(IPlatformRepo repository,
+                                   IMapper mapper,
+                                   ICommandDataClient commandDataClient)
         {
+            _commandDataClient = commandDataClient;
             _repository = repository;
             _mapper = mapper;
         }
@@ -45,7 +50,7 @@ namespace Microservice.Controllers
         }
 
         [HttpPost]
-        public ActionResult<PlatformReadDto> CreatePlatform(PlatformCreateDto platformCreateDto)
+        public async Task<ActionResult<PlatformReadDto>> CreatePlatform(PlatformCreateDto platformCreateDto)
         {
             Console.WriteLine("Creating Platform ...");
 
@@ -54,6 +59,15 @@ namespace Microservice.Controllers
             _repository.SaveChanges();
 
             var platformReadDto = _mapper.Map<PlatformReadDto>(platformModel);
+
+            try
+            {
+                await _commandDataClient.SendPlatformToCommand(platformReadDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"--> Could not send syncroniously: {ex.Message}");
+            }
 
             return CreatedAtRoute(nameof(GetPlatformById), new { Id = platformReadDto.Id,  }, platformReadDto);
         }

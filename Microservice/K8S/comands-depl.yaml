@@ -1,31 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: platforms-depl
+    name: comands-depl
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: microservice
+            app: comandservice
     template:
         metadata:
             labels:
-                app: microservice
+                app: comandservice
         spec:
             containers:
-                - name: microservice
-                  image: etozheslim/platformservice:latest
+                - name: comandservice
+                  image: etozheslim/comandservice:latest
 ---
 apiVersion: v1
 kind: Service
 metadata:
-    name: platforms-clusterip-srv
+    name: comandservice-clusterip-srv
 spec:
     type: ClusterIP
     selector:
-        app: microservice
+        app: comandservice
     ports:
-    - name: microservice
+    - name: comandservice
       protocol: TCP
       port: 80
       targetPort: 80

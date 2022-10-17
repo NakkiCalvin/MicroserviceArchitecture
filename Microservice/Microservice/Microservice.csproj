@@ -6,7 +6,29 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>64a8d72e-98d0-4552-b950-65600d4536e6</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <Configurations>Debug;Release;Production</Configurations>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="appsettings.Production.Debug.json" />
+    <Content Remove="appsettings.Production.Production.json" />
+    <Content Remove="appsettings.Production.Release.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="appsettings.Production.Debug.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appsettings.Production.json</DependentUpon>
+    </None>
+    <None Include="appsettings.Production.Production.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appsettings.Production.json</DependentUpon>
+    </None>
+    <None Include="appsettings.Production.Release.json">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>appsettings.Production.json</DependentUpon>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
@@ -18,6 +40,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.Production.json">
+      <TransformOnBuild>true</TransformOnBuild>
+    </Content>
   </ItemGroup>
 
 </Project>
