@@ -1,3 +1,4 @@
+using Microservice.AsyncDataServices;
 using Microservice.Data;
 using Microservice.SyncDataServices.Http;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ else
 builder.Services.AddScoped<IPlatformRepo, PlatformRepo>();
 
 builder.Services.AddHttpClient<ICommandDataClient, HttpCommandDataClient>();
+builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
