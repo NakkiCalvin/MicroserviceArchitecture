@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ComandsService.Models;
+using ComandsService.SyncDataServices.Grpc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,17 +9,17 @@ namespace ComandsService.Data
 {
     public static class PrepDb
     {
-        //public static void PrepPopulation(IApplicationBuilder applicationBuilder)
-        //{
-        //    using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
-        //    {
-        //        var grpcClient = serviceScope.ServiceProvider.GetService<IPlatformDataClient>();
+        public static void PrepPopulation(IApplicationBuilder applicationBuilder)
+        {
+            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+            {
+                var grpcClient = serviceScope.ServiceProvider.GetService<IPlatformDataClient>();
 
-        //        var platforms = grpcClient.ReturnAllPlatforms();
+                var platforms = grpcClient.ReturnAllPlatforms();
 
-        //        SeedData(serviceScope.ServiceProvider.GetService<ICommandRepo>(), platforms);
-        //    }
-        //}
+                SeedData(serviceScope.ServiceProvider.GetService<ICommandRepo>(), platforms);
+            }
+        }
 
         private static void SeedData(ICommandRepo repo, IEnumerable<Platform> platforms)
         {
